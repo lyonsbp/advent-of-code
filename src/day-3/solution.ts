@@ -12,10 +12,6 @@ async function getData() {
   return data;
 }
 
-function sum(arr) {
-  return arr.reduce((prev, curr) => prev + curr, 0);
-}
-
 function getCharCode(char: string): number {
   const code = char.charCodeAt(0);
   if (code >= 65 && code <= 90) return code - 38;
@@ -43,7 +39,6 @@ async function part1(data: string[]) {
   for (const items of data) {
     commonItems.push(getCommonItem(items));
   }
-
   return commonItems.reduce((prev, curr) => prev + getCharCode(curr), 0);
 }
 
@@ -57,17 +52,14 @@ async function part2(data) {
   }
 
   for (const group of groups) {
-    console.log(group);
-    const test = [group[0].split(""), group[1].split(""), group[2].split("")];
-    const int = intersection(...test);
-    // console.log(int);
+    const int = intersection(
+      ...[group[0].split(""), group[1].split(""), group[2].split("")]
+    );
     badges.push(int[0]);
   }
-  console.log(badges);
   return badges.reduce((prev, curr) => prev + getCharCode(curr), 0);
 }
 
 const data = await getData();
-//console.log(data);
 console.log(await part1(data));
 console.log(await part2(data));
