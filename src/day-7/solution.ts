@@ -14,8 +14,13 @@ async function getData() {
   return data;
 }
 
+function getSubDir(filesystem, path) {
+  return path.reduce((prev, curr) => {
+    return prev[curr];
+  }, filesystem);
+}
+
 function buildFilesystem(commands: string[][]) {
-  const seen = {};
   const root = {};
   let path: string[] = [];
   for (const command of commands) {
@@ -24,9 +29,7 @@ function buildFilesystem(commands: string[][]) {
         if (command[2] === "..") {
           path.pop();
         } else {
-          let dir = path.reduce((prev, curr) => {
-            return prev[curr];
-          }, root);
+          let dir = getSubDir(root, path);
           dir[command[2]] = {};
           path.push(command[2]);
         }
@@ -35,14 +38,10 @@ function buildFilesystem(commands: string[][]) {
         // no-op?
       }
     } else if (command[0] === "dir") {
-      let dir = path.reduce((prev, curr) => {
-        return prev[curr];
-      }, root);
+      let dir = getSubDir(root, path);
       dir[command[1]] = {};
     } else {
-      let dir = path.reduce((prev, curr) => {
-        return prev[curr];
-      }, root);
+      let dir = getSubDir(root, path);
       dir[command[1]] = Number(command[0]);
     }
   }
@@ -53,15 +52,11 @@ function getSize(dir: Record<string, any>) {
   const stack = [dir];
   let size = 0;
   for (const subDir of stack) {
-    for (const [key, value] of Object.entries(subDir)) {
-      if (typeof value === "object") {
-        stack.push(value);
-      } else {
-        size += value;
-      }
+    for (const value of Object.values(subDir)) {
+      if (typeof value === "object") stack.push(value);
+      else size += value;
     }
   }
-
   return size;
 }
 
@@ -70,17 +65,14 @@ function part1(stream: string[][]) {
   let sum = 0;
   const stack = [fileSystem];
   for (const subDir of stack) {
-    for (const [key, value] of Object.entries(subDir)) {
+    for (const value of Object.values(subDir)) {
       if (typeof value === "object") {
         const size = getSize(value);
         stack.push(value);
-        if (size <= 100000) {
-          sum += size;
-        }
+        if (size <= 100000) sum += size;
       }
     }
   }
-
   return sum;
 }
 
@@ -92,11 +84,10 @@ function part2(stream: string[][]) {
   const FREE_SPACE = TOTAL_SIZE - USED_SIZE;
   const SIZE_TO_DELETE = SPACE_REQUIRED - FREE_SPACE;
 
-  console.log({ USED_SIZE, SIZE_TO_DELETE, FREE_SPACE });
   let smallest = Infinity;
   const stack = [fileSystem];
   for (const subDir of stack) {
-    for (const [key, value] of Object.entries(subDir)) {
+    for (const value of Object.values(subDir)) {
       if (typeof value === "object") {
         const size = getSize(value);
         stack.push(value);
