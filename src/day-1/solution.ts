@@ -24,15 +24,11 @@ async function getData() {
 }
 
 async function part1() {
-  const calCounts = await getData();
-  return calCounts[calCounts.length - 1];
+
 }
 
 async function part2() {
-  const calCounts = await getData();
-  return calCounts
-    .slice(calCounts.length - 3)
-    .reduce((prev, curr) => prev + curr, 0);
+
 }
 
 console.log(await part1());
