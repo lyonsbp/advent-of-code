@@ -1,7 +1,6 @@
 import * as fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "node:url";
-import { sum } from "lodash";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
