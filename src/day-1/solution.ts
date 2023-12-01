@@ -17,20 +17,7 @@ async function part1() {
 
   let sum = 0;
   for (const line of data) {
-    let first = null;
-    let last = null;
-    for (const char of line) {
-      if (char.match(/\d/)) {
-        if (first === null) {
-          first = char;
-        } else {
-          last = char;
-        }
-      }
-    }
-    if (last === null) {
-      last = first;
-    }
+    const { first, last } = getFirstAndLastNumbers(line);
     sum += parseInt(first + last);
   }
 
@@ -44,24 +31,30 @@ async function part2() {
 
   let sum = 0;
   for (const line of newData) {
-    let first = null;
-    let last = null;
-    for (const char of line) {
-      if (char.match(/\d/)) {
-        if (first === null) {
-          first = char;
-        } else {
-          last = char;
-        }
-      }
-    }
-    if (last === null) {
-      last = first;
-    }
+    const { first, last } = getFirstAndLastNumbers(line);
     sum += parseInt(first + last);
   }
 
   return sum;
+}
+
+function getFirstAndLastNumbers(line: string) {
+  let first = null;
+  let last = null;
+  for (const char of line) {
+    if (char.match(/\d/)) {
+      if (first === null) {
+        first = char;
+      } else {
+        last = char;
+      }
+    }
+  }
+  if (last === null) {
+    last = first;
+  }
+
+  return { first, last };
 }
 
 function convertStringNumeralsToNumbers(line: string) {
