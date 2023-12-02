@@ -1,41 +1,41 @@
-import * as fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-async function getData() {
-  const file = await fs.readFile(path.join(__dirname, "input.txt"));
-
-  const data = file.toString().split("\n");
-
-  return data;
-}
+import { getData, profile } from "../util/file.js";
 
 async function part1() {
-  const data = await getData();
+  const result = profile("Day 1 Part 1", async () => {
+    const data = await getData(__dirname);
 
-  let sum = 0;
-  for (const line of data) {
-    const { first, last } = getFirstAndLastNumbers(line);
-    sum += parseInt(first + last);
-  }
+    let sum = 0;
+    for (const line of data) {
+      const { first, last } = getFirstAndLastNumbers(line);
+      sum += parseInt(first + last);
+    }
 
-  return sum;
+    return sum;
+  });
+
+  return result;
 }
 
 async function part2() {
-  const data = await getData();
+  const result = profile("Day 1 Part 2", async () => {
+    const data = await getData(__dirname);
 
-  let newData = data.map(convertStringNumeralsToNumbers);
+    let newData = data.map(convertStringNumeralsToNumbers);
 
-  let sum = 0;
-  for (const line of newData) {
-    const { first, last } = getFirstAndLastNumbers(line);
-    sum += parseInt(first + last);
-  }
+    let sum = 0;
+    for (const line of newData) {
+      const { first, last } = getFirstAndLastNumbers(line);
+      sum += parseInt(first + last);
+    }
 
-  return sum;
+    return sum;
+  });
+
+  return result;
 }
 
 function getFirstAndLastNumbers(line: string) {
@@ -73,5 +73,5 @@ function convertStringNumeralsToNumbers(line: string) {
   return newLine;
 }
 
-console.log(await part1());
-console.log(await part2());
+await part1();
+await part2();
