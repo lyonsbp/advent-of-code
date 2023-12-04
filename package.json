@@ -1,6 +1,7 @@
 {
   "scripts": {
     "start": "nodemon --exec \"ts-node --esm\" ./src/day-${npm_config_num}/solution.ts",
+    "start:once": "ts-node --esm ./src/day-${npm_config_num}/solution.ts",
     "arg": "echo \"The value of --foo is 'start-${npm_config_foo}'\""
   },
   "dependencies": {
